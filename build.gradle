@@ -57,6 +57,9 @@ dependencies {
     compile 'org.apache.logging.log4j:log4j-core:2.8.1'
     compile 'com.google.code.gson:gson:2.8.0' // bukkit
     compile 'com.google.guava:guava:21.0' //bukkit
+
+    // Sponge
+    compile 'com.google.inject:guice:4.1.0'
 }
 
 targetCompatibility = '1.8'
@@ -66,6 +69,7 @@ compileJava.options.encoding = 'UTF-8'
 sourceSets {
     // Fix idea can't import module automatically
     main.java.srcDir 'src/main/java/'
+    test.java.srcDir 'src/test/java/'
     main.java.srcDir 'projects/Mohist/src/main/java/'
 }
 
