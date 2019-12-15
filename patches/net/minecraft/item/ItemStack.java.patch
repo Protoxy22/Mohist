@@ -61,6 +61,24 @@
      private static final String __OBFID = "CL_00000043";
  
      private cpw.mods.fml.common.registry.RegistryDelegate<Item> delegate;
+     
+@@ -82,12 +107,23 @@
+         {
+             this.itemDamage = 0;
+         }
++        
++        sizeCheck(this);
+     }
+ 
++    public static void sizeCheck(ItemStack stack)
++    {
++    	if(stack.stackSize < -1)
++    	{
++    		//stack.field_151002_e = Items.flint;
++    		stack.stackSize = 0;
++    	}
++    }     
+     
 @@ -95,6 +107,9 @@
  
      public ItemStack splitStack(int p_77979_1_)
@@ -95,8 +113,10 @@
 +        if(MinecraftServer.uraniumConfig.captureBlockOnItemRightClick.getValue()) {
 +            CaptureBlock tCapture = p_77957_1_.mCapture.startCapture(p_77957_2_, this);
 +            ItemStack tResult = this.getItem().onItemRightClick(this, p_77957_1_, p_77957_2_);
-+            return !tCapture.endCapture() ? this : tResult;
++            sizeCheck(this);
++             return !tCapture.endCapture() ? this : tResult;
 +        }else{
++    	       sizeCheck(this);
 +            ItemStack tResult = this.getItem().onItemRightClick(this, p_77957_1_, p_77957_2_);
 +            return tResult;
 +        }
@@ -206,3 +226,49 @@
 +    }
 +    // Spigot end
  }
+ 
+ @@ -153,7 +192,8 @@
+ 
+     public NBTTagCompound writeToNBT(NBTTagCompound p_77955_1_)
+     {
+-        p_77955_1_.setShort("id", (short)Item.getIdFromItem(this.field_151002_e));
++        sizeCheck(this);
++    	p_77955_1_.setShort("id", (short)Item.getIdFromItem(this.field_151002_e));
+         p_77955_1_.setByte("Count", (byte)this.stackSize);
+         p_77955_1_.setShort("Damage", (short)this.itemDamage);
+ 
+@@ -175,6 +215,8 @@
+         {
+             this.itemDamage = 0;
+         }
++        
++        sizeCheck(this);
+ 
+         if (p_77963_1_.hasKey("tag", 10))
+         {
+@@ -184,11 +226,13 @@
+ 
+     public int getMaxStackSize()
+     {
++    	sizeCheck(this);
+         return this.getItem().getItemStackLimit(this);
+     }
+ 
+     public boolean isStackable()
+     {
++        sizeCheck(this);
+         return this.getMaxStackSize() > 1 && (!this.isItemStackDamageable() || !this.isItemDamaged());
+     }
+ 
+@@ -227,8 +271,22 @@
+         return getItem().getMaxDamage(this);
+     }
+@@ -326,6 +404,8 @@
+ 
+     public ItemStack copy()
+     {
++    	sizeCheck(this);
++    	
+         ItemStack itemstack = new ItemStack(this.field_151002_e, this.stackSize, this.itemDamage);
+ 
+         if (this.stackTagCompound != null)
